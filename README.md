@@ -2,6 +2,8 @@
 
 # QuickLook.Plugin.FolderViewer
 
+[![Build status](https://ci.appveyor.com/api/projects/status/ojondnxvd4l3yu6s?svg=true)](https://ci.appveyor.com/project/adyanth/quicklook-plugin-folderviewer/build/artifacts)
+
 This plugin adds Folder Viewer to [QuickLook](https://github.com/QL-Win/QuickLook).
 
 ## License
