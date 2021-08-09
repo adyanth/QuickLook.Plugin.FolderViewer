@@ -104,6 +104,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rem powershell -file "$(SolutionDir)Scripts\pack-zip.ps1"</PostBuildEvent>
+    <PostBuildEvent>cd "$(SolutionDir)Scripts"
+powershell -file "$(SolutionDir)Scripts\pack-zip.ps1"</PostBuildEvent>
   </PropertyGroup>
 </Project>
