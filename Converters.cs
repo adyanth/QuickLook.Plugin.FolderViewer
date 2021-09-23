@@ -92,6 +92,24 @@ namespace QuickLook.Plugin.FolderViewer
         }
     }
 
+    public class LevelToIndentConverter : DependencyObject, IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values[0] == DependencyProperty.UnsetValue)
+                values[0] = 1;
+
+            var level = (int)values[0];
+            var indent = (double)values[1];
+            return indent * level;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class FileToIconConverter : DependencyObject, IMultiValueConverter
     {
         // FB: I have no idea what I'm doing here...

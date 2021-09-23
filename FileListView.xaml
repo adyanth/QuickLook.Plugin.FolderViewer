@@ -18,6 +18,7 @@
         <Grid.Resources>
 
             <!-- Converts the level in the tree to the width of the spacer column -->
+            <local:LevelToIndentConverter x:Key="LevelToIndentConverter" />
             <local:SizePrettyPrintConverter x:Key="SizePrettyPrintConverter" />
             <local:DatePrintConverter x:Key="DatePrintConverter" />
             <local:FileToIconConverter x:Key="FileToIconConverter" />
@@ -32,13 +33,14 @@
                         <RowDefinition Height="2" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="1" ShowGridLines="False">
+                        <!-- All column widths are shared except for column 1 which is sized
+                         to compensate for different indentation at each level -->
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition MinWidth="300" SharedSizeGroup="fileNameColumn" />
+                            <ColumnDefinition />
                             <ColumnDefinition MinWidth="100" SharedSizeGroup="sizeColumn" />
                             <ColumnDefinition MinWidth="100" SharedSizeGroup="dateColumn" />
                         </Grid.ColumnDefinitions>
-                        <!-- All column widths are shared except for column 1 which is sized
-                         to compensate for different indentation at each level -->
                         <StackPanel Grid.Column="0" Orientation="Horizontal">
                             <Image Width="16" Height="16">
                                 <Image.Source>
@@ -49,7 +51,16 @@
                             </Image>
                             <TextBlock Text="{Binding Name}" />
                         </StackPanel>
-                        <TextBlock Grid.Column="1">
+                        <Rectangle Grid.Column="1">
+                            <Rectangle.Width>
+                                <MultiBinding Converter="{StaticResource LevelToIndentConverter}">
+                                    <Binding Path="Level" />
+                                    <Binding ElementName="treeViewItemToMeasure"
+                                             Path="ActualWidth" />
+                                </MultiBinding>
+                            </Rectangle.Width>
+                        </Rectangle>
+                        <TextBlock Grid.Column="2">
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource SizePrettyPrintConverter}">
                                     <Binding Path="Size" />
@@ -57,7 +68,7 @@
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
-                        <TextBlock Grid.Column="2">
+                        <TextBlock Grid.Column="3">
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource DatePrintConverter}">
                                     <Binding Path="ModifiedDate" />
@@ -70,21 +81,42 @@
             </HierarchicalDataTemplate>
         </Grid.Resources>
 
-        <!-- One item for the header row -->
+        <!-- Tree view with one item for the header row -->
 
-        <Grid ShowGridLines="False" Margin="24,0,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition SharedSizeGroup="fileNameColumn" />
-                <ColumnDefinition SharedSizeGroup="sizeColumn" />
-                <ColumnDefinition SharedSizeGroup="dateColumn" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0"
-                        Text="Name" FontWeight="Bold" />
-            <TextBlock Grid.Column="1"
-                        Text="Size" FontWeight="Bold" />
-            <TextBlock Grid.Column="2"
-                        Text="Date" FontWeight="Bold" />
-        </Grid>
+        <TreeView BorderThickness="0" Focusable="False" Background="Transparent"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <TreeViewItem Focusable="False">
+                <TreeViewItem.Header>
+                    <Grid ShowGridLines="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="fileNameColumn" />
+                            <ColumnDefinition />
+                            <ColumnDefinition SharedSizeGroup="sizeColumn" />
+                            <ColumnDefinition SharedSizeGroup="dateColumn" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Name" FontWeight="Bold" />
+                        <TreeViewItem Grid.Column="1">
+                            <TreeViewItem.Header>
+                                <TreeViewItem x:Name="treeViewItemToMeasure"
+                                              Padding="0" />
+                            </TreeViewItem.Header>
+
+                            <!-- Set the width of Column 1 to the same width as the top level 
+                                 in the data -->
+                            <TreeViewItem.Width>
+                                <MultiBinding Converter="{StaticResource LevelToIndentConverter}">
+                                    <Binding Path="Level" />
+                                    <Binding ElementName="treeViewItemToMeasure"
+                                             Path="ActualWidth" />
+                                </MultiBinding>
+                            </TreeViewItem.Width>
+                        </TreeViewItem>
+                        <TextBlock Grid.Column="2" Text="Size" FontWeight="Bold" />
+                        <TextBlock Grid.Column="3" Text="Date" FontWeight="Bold" />
+                    </Grid>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+        </TreeView>
         <Border Grid.Row="0" BorderBrush="#888" BorderThickness="0 0 0 1" />
 
         <!-- Tree view that will display hierarchical data rows -->
