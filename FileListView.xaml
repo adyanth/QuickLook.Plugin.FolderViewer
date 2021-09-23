@@ -1,4 +1,4 @@
-﻿﻿<UserControl x:Class="QuickLook.Plugin.FolderViewer.FileListView"
+﻿<UserControl x:Class="QuickLook.Plugin.FolderViewer.FileListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -100,6 +100,6 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
-      <Border Grid.Row="1" BorderBrush="#888" BorderThickness="0 0 0 1" />
+        <Border Grid.Row="1" BorderBrush="#888" BorderThickness="0 0 0 1" />
     </Grid>
 </UserControl>
