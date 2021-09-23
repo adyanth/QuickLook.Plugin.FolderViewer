@@ -6,6 +6,10 @@
 
 This plugin adds Folder Viewer to [QuickLook](https://github.com/QL-Win/QuickLook).
 
+# Screenshot
+![image](https://user-images.githubusercontent.com/33192449/134454189-37192007-63b1-4f0c-aed4-d2f240167d9b.png)
+
+
 ## License
 
 MIT License.
