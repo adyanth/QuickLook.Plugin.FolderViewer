@@ -40,8 +40,8 @@
                     <ColumnDefinition Width="30*" />
                 </Grid.ColumnDefinitions>
                 <Label x:Name="totalSize" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}">Total Size: 0B</Label>
-                <Label x:Name="numFolders" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}">Folders: 0</Label>
-                <Label x:Name="numFiles" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}">Files: 0</Label>
+                <Label x:Name="numFolders" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}"></Label>
+                <Label x:Name="numFiles" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}"></Label>
             </Grid>
         </Grid>
     </Grid>

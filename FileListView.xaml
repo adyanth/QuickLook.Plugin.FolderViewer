@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="QuickLook.Plugin.FolderViewer.FileListView"
+﻿﻿<UserControl x:Class="QuickLook.Plugin.FolderViewer.FileListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,7 +10,7 @@
           x:Name="treeGrid">
         <Grid.RowDefinitions>
             <!-- Header row -->
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
             <!-- Row for data -->
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -32,14 +32,13 @@
                         <RowDefinition Height="2" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="1" ShowGridLines="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="300" SharedSizeGroup="fileNameColumn" />
+                            <ColumnDefinition MinWidth="100" SharedSizeGroup="sizeColumn" />
+                            <ColumnDefinition MinWidth="100" SharedSizeGroup="dateColumn" />
+                        </Grid.ColumnDefinitions>
                         <!-- All column widths are shared except for column 1 which is sized
                          to compensate for different indentation at each level -->
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="300" SharedSizeGroup="rowHeaderColumn" />
-                            <ColumnDefinition />
-                            <ColumnDefinition MinWidth="100" SharedSizeGroup="column1" />
-                            <ColumnDefinition MinWidth="100" SharedSizeGroup="column2" />
-                        </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal">
                             <Image Width="16" Height="16">
                                 <Image.Source>
@@ -50,9 +49,7 @@
                             </Image>
                             <TextBlock Text="{Binding Name}" />
                         </StackPanel>
-                        <Rectangle Grid.Column="1">
-                        </Rectangle>
-                        <TextBlock Grid.Column="2">
+                        <TextBlock Grid.Column="1">
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource SizePrettyPrintConverter}">
                                     <Binding Path="Size" />
@@ -60,7 +57,7 @@
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
-                        <TextBlock Grid.Column="3">
+                        <TextBlock Grid.Column="2">
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource DatePrintConverter}">
                                     <Binding Path="ModifiedDate" />
@@ -73,31 +70,22 @@
             </HierarchicalDataTemplate>
         </Grid.Resources>
 
-        <!-- Tree view with one item for the header row -->
+        <!-- One item for the header row -->
 
-        <TreeView BorderThickness="0" Focusable="False" Background="Transparent"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <TreeViewItem Focusable="False" Visibility="Collapsed">
-                <TreeViewItem.Header>
-                    <Grid ShowGridLines="False">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition SharedSizeGroup="rowHeaderColumn" />
-                            <ColumnDefinition />
-                            <ColumnDefinition SharedSizeGroup="column1" />
-                            <ColumnDefinition SharedSizeGroup="column2" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
-                                   Text=" " />
-                        <TreeViewItem Grid.Column="1">
-                        </TreeViewItem>
-                        <TextBlock Grid.Column="2"
-                                   Text="Original Size" />
-                        <TextBlock Grid.Column="3"
-                                   Text="Modified Date" />
-                    </Grid>
-                </TreeViewItem.Header>
-            </TreeViewItem>
-        </TreeView>
+        <Grid ShowGridLines="False" Margin="24,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="fileNameColumn" />
+                <ColumnDefinition SharedSizeGroup="sizeColumn" />
+                <ColumnDefinition SharedSizeGroup="dateColumn" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                        Text="Name" FontWeight="Bold" />
+            <TextBlock Grid.Column="1"
+                        Text="Size" FontWeight="Bold" />
+            <TextBlock Grid.Column="2"
+                        Text="Date" FontWeight="Bold" />
+        </Grid>
+        <Border Grid.Row="0" BorderBrush="#888" BorderThickness="0 0 0 1" />
 
         <!-- Tree view that will display hierarchical data rows -->
 
@@ -112,5 +100,6 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
+      <Border Grid.Row="1" BorderBrush="#888" BorderThickness="0 0 0 1" />
     </Grid>
 </UserControl>
