@@ -52,7 +52,7 @@ namespace QuickLook.Plugin.FolderViewer
             _panel = new FolderInfoPanel(path);
 
             context.ViewerContent = _panel;
-            context.Title = $"{Path.GetDirectoryName(path)}";
+            context.Title = $"{Path.GetFileName(path)}";
 
             context.IsBusy = false;
         }
