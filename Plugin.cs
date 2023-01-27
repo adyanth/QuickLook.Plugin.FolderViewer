@@ -16,7 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using QuickLook.Common.Plugin;
 
@@ -28,14 +30,59 @@ namespace QuickLook.Plugin.FolderViewer
         private bool _isDirectory;
 
         public int Priority => -5;
-
+        private static readonly int FILES_MAX = 300;
         public void Init()
         {
         }
 
+        /// <summary>
+        /// A safe way to get all the files in a directory and sub directory without crashing on UnauthorizedException or PathTooLongException
+        /// </summary>
+        /// <param name="rootPath">Starting directory</param>
+        /// <param name="patternMatch">Filename pattern match</param>
+        /// <param name="searchOption">Search subdirectories or only top level directory for files</param>
+        /// <returns>List of files</returns>
+        public static IEnumerable<string> GetDirectoryFiles(string rootPath, string patternMatch, SearchOption searchOption)
+        {
+            var foundFiles = Enumerable.Empty<string>();
+
+            if (searchOption == SearchOption.AllDirectories)
+            {
+                try
+                {
+                    IEnumerable<string> subDirs = Directory.EnumerateDirectories(rootPath);
+                    foreach (string dir in subDirs)
+                    {
+                        if (foundFiles.Count() < FILES_MAX)
+                            foundFiles = foundFiles.Concat(GetDirectoryFiles(dir, patternMatch, searchOption)); // Add files in subdirectories recursively to the list
+                    }
+                }
+                catch (UnauthorizedAccessException) { }
+                catch (PathTooLongException) { }
+            }
+
+            try
+            {
+                if (foundFiles.Count() < FILES_MAX)
+                    foundFiles = foundFiles.Concat(Directory.EnumerateFiles(rootPath, patternMatch)); // Add files from the current directory
+            }
+            catch (UnauthorizedAccessException) { }
+
+            return foundFiles;
+        }
+
+        private int FileCount(string path)
+        {
+            /*DirectoryInfo dirInfo = new DirectoryInfo(path);
+            return dirInfo.EnumerateDirectories()
+                    .AsParallel()
+                    .SelectMany(di => di.EnumerateFiles("*.*", SearchOption.AllDirectories))
+                    .Count();*/
+            return GetDirectoryFiles(path, "*", SearchOption.AllDirectories).Count();
+        }
         public bool CanHandle(string path)
         {
-            if (Path.GetPathRoot(path) == path)
+            if (Path.GetPathRoot(path) == path || FileCount(path) > FILES_MAX - 1)
                 return false;
 
             _isDirectory = Directory.Exists(path);
