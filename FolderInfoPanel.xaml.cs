@@ -69,6 +69,18 @@ namespace QuickLook.Plugin.FolderViewer
 
             _disposed = true;
 
+            foreach (var entry in _fileEntries.Values)
+            {
+                if (entry is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            }
+
+            _fileEntries.Clear();
+
+            PropertyChanged = null;
+
             fileListView.Dispose();
         }
 
